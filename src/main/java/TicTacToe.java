@@ -1,61 +1,81 @@
-import java.util.Scanner;
-import java.util.Random;
-
 public class TicTacToe {
 
-    static String player1 = "Player 1";
-    static String player2 = "Player 2";
+    private char[][] board;
+    private char currentPlayer;
 
-    static char player1Symbol;
-    static char player2Symbol;
-    static String currentPlayer;
+    // Constructor
+    public TicTacToe() {
+        board = new char[3][3];
 
-    static Scanner scanner = new Scanner(System.in);
+        // initialize board with empty spaces
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[i][j] = ' ';
+            }
+        }
 
-    // UC3: Accept User Slot Input
-    public static int getUserSlot() {
-        System.out.print("Enter a slot number (1-9): ");
-        return scanner.nextInt();
+        currentPlayer = 'X';
     }
 
-    // UC4: Convert Slot Number to Row and Column
-    public static int[] convertSlotToIndex(int slot) {
+    // Display board
+    public void printBoard() {
+        for (int i = 0; i < 3; i++) {
+            System.out.println(board[i][0] + " | " +
+                    board[i][1] + " | " +
+                    board[i][2]);
+            if (i < 2) System.out.println("--+---+--");
+        }
+    }
+
+    // Switch player
+    public void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    // Make move (UC4 + UC5 combined)
+    public boolean makeMove(int slot) {
 
         int row = (slot - 1) / 3;
         int col = (slot - 1) % 3;
 
-        return new int[]{row, col};
+        // UC5 validation
+        if (row < 0 || row > 2 || col < 0 || col > 2) {
+            return false;
+        }
+
+        if (board[row][col] != ' ') {
+            return false;
+        }
+
+        // place move
+        board[row][col] = currentPlayer;
+        return true;
+    }
+
+    // Main game loop
+    public void playGame() {
+        java.util.Scanner sc = new java.util.Scanner(System.in);
+
+        for (int i = 0; i < 9; i++) {
+            printBoard();
+
+            System.out.println("Player " + currentPlayer + " enter slot (1-9): ");
+            int slot = sc.nextInt();
+
+            if (makeMove(slot)) {
+                switchPlayer();
+            } else {
+                System.out.println("Invalid move, try again.");
+                i--; // repeat turn
+            }
+        }
+
+        printBoard();
+        System.out.println("Game Over!");
     }
 
     public static void main(String[] args) {
-
-        // UC2: Toss to Decide First Player and Symbol
-        Random random = new Random();
-
-        int toss = random.nextInt(2);
-
-        if (toss == 0) {
-            currentPlayer = player1;
-            player1Symbol = 'X';
-            player2Symbol = 'O';
-        } else {
-            currentPlayer = player2;
-            player2Symbol = 'X';
-            player1Symbol = 'O';
-        }
-
-        System.out.println("=== Toss Result ===");
-        System.out.println(currentPlayer + " won the toss!");
-        System.out.println(player1 + " Symbol: " + player1Symbol);
-        System.out.println(player2 + " Symbol: " + player2Symbol);
-
-        // UC3
-        int userSlot = getUserSlot();
-
-        // UC4
-        int[] index = convertSlotToIndex(userSlot);
-
-        System.out.println("Row Index: " + index[0]);
-        System.out.println("Column Index: " + index[1]);
+        TicTacToe game = new TicTacToe();
+        game.playGame();
     }
 }
