@@ -1,5 +1,5 @@
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 
 public class TicTacToe {
 
@@ -38,6 +38,25 @@ public class TicTacToe {
         board[row][col] = symbol;
     }
 
+    public boolean checkWin(char player) {
+
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0] == player && board[i][1] == player && board[i][2] == player)
+                return true;
+
+            if (board[0][i] == player && board[1][i] == player && board[2][i] == player)
+                return true;
+        }
+
+        if (board[0][0] == player && board[1][1] == player && board[2][2] == player)
+            return true;
+
+        if (board[0][2] == player && board[1][1] == player && board[2][0] == player)
+            return true;
+
+        return false;
+    }
+
     public boolean isDraw() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -47,33 +66,12 @@ public class TicTacToe {
         return true;
     }
 
-    public boolean checkWin() {
-        for (int i = 0; i < 3; i++) {
-            if (board[i][0] == currentPlayer &&
-                    board[i][1] == currentPlayer &&
-                    board[i][2] == currentPlayer) return true;
-
-            if (board[0][i] == currentPlayer &&
-                    board[1][i] == currentPlayer &&
-                    board[2][i] == currentPlayer) return true;
-        }
-
-        if (board[0][0] == currentPlayer &&
-                board[1][1] == currentPlayer &&
-                board[2][2] == currentPlayer) return true;
-
-        if (board[0][2] == currentPlayer &&
-                board[1][1] == currentPlayer &&
-                board[2][0] == currentPlayer) return true;
-
-        return false;
-    }
-
     public void switchPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
     }
 
     public void playerMove(Scanner sc) {
+
         int slot, row, col;
 
         do {
@@ -89,6 +87,7 @@ public class TicTacToe {
     }
 
     public void computerMove() {
+
         int slot, row, col;
 
         do {
@@ -104,6 +103,7 @@ public class TicTacToe {
     }
 
     public void playGame() {
+
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -116,7 +116,7 @@ public class TicTacToe {
                 computerMove();
             }
 
-            if (checkWin()) {
+            if (checkWin(currentPlayer)) {
                 printBoard();
                 System.out.println("Player " + currentPlayer + " wins!");
                 break;
