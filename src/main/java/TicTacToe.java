@@ -1,9 +1,14 @@
+import java.util.Random;
+
 public class TicTacToe {
 
     private char[][] board;
+    private Random random;
 
     public TicTacToe() {
         board = new char[3][3];
+        random = new Random();
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 board[i][j] = ' ';
@@ -11,23 +16,29 @@ public class TicTacToe {
         }
     }
 
-    public boolean placeMove(int row, int col, char symbol) {
-        if (row < 0 || row > 2 || col < 0 || col > 2) {
-            return false;
-        }
-        if (board[row][col] != ' ') {
-            return false;
-        }
-        board[row][col] = symbol;
-        return true;
+    public boolean isValidMove(int row, int col) {
+        return row >= 0 && row <= 2 &&
+                col >= 0 && col <= 2 &&
+                board[row][col] == ' ';
     }
 
-    public void printBoard() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(board[i][j] + " | ");
-            }
-            System.out.println();
-        }
+    public void placeMove(int row, int col, char symbol) {
+        board[row][col] = symbol;
+    }
+
+    public void computerMove() {
+        int slot;
+        int row, col;
+
+        do {
+            slot = random.nextInt(9) + 1;
+
+            row = (slot - 1) / 3;
+            col = (slot - 1) % 3;
+
+        } while (!isValidMove(row, col));
+
+        placeMove(row, col, 'O');
+        System.out.println("Computer placed at slot: " + slot);
     }
 }
