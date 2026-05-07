@@ -15,8 +15,16 @@ public class TicTacToe {
     // UC3: Accept User Slot Input
     public static int getUserSlot() {
         System.out.print("Enter a slot number (1-9): ");
-        int slot = scanner.nextInt();
-        return slot;
+        return scanner.nextInt();
+    }
+
+    // UC4: Convert Slot Number to Row and Column
+    public static int[] convertSlotToIndex(int slot) {
+
+        int row = (slot - 1) / 3;
+        int col = (slot - 1) % 3;
+
+        return new int[]{row, col};
     }
 
     public static void main(String[] args) {
@@ -41,9 +49,13 @@ public class TicTacToe {
         System.out.println(player1 + " Symbol: " + player1Symbol);
         System.out.println(player2 + " Symbol: " + player2Symbol);
 
-        // UC3 Function Call
+        // UC3
         int userSlot = getUserSlot();
 
-        System.out.println("You selected slot: " + userSlot);
+        // UC4
+        int[] index = convertSlotToIndex(userSlot);
+
+        System.out.println("Row Index: " + index[0]);
+        System.out.println("Column Index: " + index[1]);
     }
 }
